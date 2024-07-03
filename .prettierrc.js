@@ -1,0 +1,17 @@
+module.exports = {
+  trailingComma: 'es5',
+  tabWidth: 2,
+  semi: true,
+  singleQuote: true,
+  printWidth: 100,
+  bracketSpacing: true,
+  jsxBracketSameLine: true,
+  overrides: [
+    {
+      files: '*.svg',
+      options: {
+        parser: 'html',
+      },
+    },
+  ],
+};
