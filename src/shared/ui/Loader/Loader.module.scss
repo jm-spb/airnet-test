@@ -1,0 +1,21 @@
+.loaderWrapper {
+  position: relative;
+  transform: translateZ(0) scale(1);
+}
+
+.loaderWrapper > div {
+  position: absolute;
+  border-radius: 50%;
+  border: 8px solid #000;
+  animation: spinner-animation 1s linear infinite;
+}
+
+@keyframes spinner-animation {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,64 @@
+.vertical-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+}
+
+.day {
+  @extend .vertical-center;
+  flex: 1;
+  border-left: solid 1px lightgray;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:first-child {
+    border-left: none;
+  }
+}
+
+.dayNames {
+  color: var(--color-primary-light);
+  font-weight: bold;
+  height: 6rem;
+
+  .day {
+    cursor: default;
+
+    &:hover {
+      background: inherit;
+    }
+  }
+}
+
+.calendar {
+  background: var(--color-background-content);
+  border: solid 1px lightgray;
+  box-shadow: 0 0 15px 0 grey;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.header {
+  @extend .vertical-center;
+  color: var(--color-text-primary-light);
+  cursor: default;
+  font-size: var(--font-size-m);
+  display: block;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.monthDisplay {
+  align-items: center;
+  height: 6rem;
+  background: var(--color-primary);
+}
+
+.monthLabel {
+  flex: 1;
+}
