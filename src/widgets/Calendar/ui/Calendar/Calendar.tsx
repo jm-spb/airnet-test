@@ -6,7 +6,6 @@ import * as styles from './Calendar.module.scss';
 interface CalendarWeekProps {
   date: Date;
   month: Date;
-  select: (date: Date) => void;
   selected: Date;
 }
 
@@ -61,11 +60,7 @@ const isSameDay = (date1: Date, date2: Date): boolean =>
   date1.getMonth() === date2.getMonth() &&
   date1.getDate() === date2.getDate();
 
-const Week = memo<CalendarWeekProps>(({ date, month, select, selected }): React.ReactNode => {
-  const handleClick = (selectedDay: Date) => {
-    select(selectedDay);
-  };
-
+const Week = memo(({ date, month, selected }: CalendarWeekProps): React.ReactNode => {
   const days = Array.from({ length: 7 }, (_, i) => {
     const currentDate = new Date(date);
     currentDate.setDate(currentDate.getDate() + i);
@@ -84,6 +79,7 @@ const Week = memo<CalendarWeekProps>(({ date, month, select, selected }): React.
       {days.map(({ date, isCurrentMonth, isToday, name, number }) => (
         <Td
           key={number}
+          data-date={date}
           className={`${isToday ? styles.todayCell : ''} 
           ${isCurrentMonth ? '' : styles.differentMonth} 
           ${isSameDay(date, selected) ? styles.selected : ''}
@@ -92,8 +88,7 @@ const Week = memo<CalendarWeekProps>(({ date, month, select, selected }): React.
           borderBottom="solid 1px lightgray"
           _notFirst={{ borderLeft: 'solid 1px lightgray' }}
           cursor="pointer"
-          _hover={{ backgroundColor: 'lightgray' }}
-          onClick={() => handleClick(date)}>
+          _hover={{ backgroundColor: 'lightgray' }}>
           {number}
         </Td>
       ))}
@@ -122,10 +117,14 @@ export const Calendar = (): React.ReactNode => {
     });
   }, []);
 
-  const select = (date: Date) => {
-    setSelectedDate(new Date(date));
-    const dateClone = new Date(date.getTime());
-    setCurrentMonth(dateClone);
+  const handleDayClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLTableCellElement;
+    if (target.tagName === 'TD') {
+      const selectedDay = new Date(target.dataset.date);
+      setSelectedDate(selectedDay);
+      const dateClone = new Date(selectedDay.getTime());
+      setCurrentMonth(dateClone);
+    }
   };
 
   const renderTableWeeks = (): React.ReactNode => {
@@ -142,7 +141,6 @@ export const Calendar = (): React.ReactNode => {
           key={date.getTime()}
           date={new Date(date)}
           month={currentMonth}
-          select={select}
           selected={selectedDate}
         />
       );
@@ -169,7 +167,7 @@ export const Calendar = (): React.ReactNode => {
       <TableContainer bg="backgroundContent">
         <Table>
           <RenderDayNames />
-          <Tbody>{renderTableWeeks()}</Tbody>
+          <Tbody onClick={handleDayClick}>{renderTableWeeks()}</Tbody>
         </Table>
       </TableContainer>
     </Container>
