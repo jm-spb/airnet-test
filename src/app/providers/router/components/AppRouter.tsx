@@ -7,13 +7,7 @@ import { Loader } from 'shared/ui/Loader/Loader';
 const AppRouter = () => {
   const elements = useRoutes(Object.values(routeConfig));
 
-  return (
-    <Suspense fallback={<Loader />}>
-      <Container display="flex" alignItems="center" justifyContent="center" h="100vh">
-        {elements}
-      </Container>
-    </Suspense>
-  );
+  return <Suspense fallback={<Loader />}>{elements}</Suspense>;
 };
 
 export default AppRouter;

@@ -1,13 +1,7 @@
-@import './reset.scss';
-@import './variables.scss';
-@import './themes/light.scss';
-
-body {
-  font: var(--font-m);
-  color: var(--color-text-primary);
+html {
+  font-size: 62.5%;
 }
 
-.app {
-  background: var(--color-background-main);
-  min-height: 100vh;
+body {
+  color: var(--color-text-primary);
 }

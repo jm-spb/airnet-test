@@ -1,10 +1,10 @@
-import { Container } from '@chakra-ui/react';
+import { Center } from '@chakra-ui/react';
 import { Calendar } from 'widgets/Calendar';
 
 const MainPage = () => (
-  <Container w="90rem">
+  <Center maxW="100%" h="100%">
     <Calendar />
-  </Container>
+  </Center>
 );
 
 export default MainPage;
