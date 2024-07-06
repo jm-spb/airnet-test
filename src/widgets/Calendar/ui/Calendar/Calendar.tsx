@@ -1,51 +1,67 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { Container, Flex, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import * as styles from './Calendar.module.scss';
 
-interface WeekProps {
+interface CalendarWeekProps {
   date: Date;
   month: Date;
   select: (date: Date) => void;
   selected: Date;
 }
 
-const DayNames = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
+interface TableHeaderProps {
+  renderMonthName: string;
+  previous: () => void;
+  next: () => void;
+}
 
-const renderDayNames = DayNames.map((day: string) => (
-  <Th
-    key={day}
-    color="secondary"
-    fontSize="fontSizeM"
-    textAlign="center"
-    borderBottom="solid 1px lightgray"
-    _notFirst={{ borderLeft: 'solid 1px lightgray' }}>
-    {day}
-  </Th>
-));
+const dayNames = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
 
-const Header = ({ renderMonthName, previous, next }: any): React.ReactNode => (
-  <Flex
-    h="6rem"
-    fontSize="fontSizeM"
-    bg="primary"
-    color="textPrimaryLight"
-    textTransform="uppercase"
-    fontWeight="bold"
-    justifyContent="space-between"
-    alignItems="center">
-    <ChevronLeftIcon boxSize={26} _hover={{ cursor: 'pointer' }} onClick={previous} />
-    <span>{renderMonthName}</span>
-    <ChevronRightIcon boxSize={26} _hover={{ cursor: 'pointer' }} onClick={next} />
-  </Flex>
+const RenderDayNames = memo(
+  (): React.ReactNode => (
+    <Thead>
+      <Tr h="6rem">
+        {dayNames.map((day: string) => (
+          <Th
+            key={day}
+            color="secondary"
+            fontSize="fontSizeM"
+            textAlign="center"
+            borderBottom="solid 1px lightgray"
+            _notFirst={{ borderLeft: 'solid 1px lightgray' }}>
+            {day}
+          </Th>
+        ))}
+      </Tr>
+    </Thead>
+  )
 );
 
-const isSameDay = (date1: Date, date2: Date) =>
+const Header = memo<TableHeaderProps>(
+  ({ renderMonthName, previous, next }): React.ReactNode => (
+    <Flex
+      h="6rem"
+      fontSize="fontSizeM"
+      bg="primary"
+      color="textPrimaryLight"
+      textTransform="uppercase"
+      fontWeight="bold"
+      justifyContent="space-between"
+      alignItems="center">
+      <ChevronLeftIcon boxSize={26} _hover={{ cursor: 'pointer' }} onClick={previous} />
+      <span>{renderMonthName}</span>
+      <ChevronRightIcon boxSize={26} _hover={{ cursor: 'pointer' }} onClick={next} />
+    </Flex>
+  )
+);
+
+const isSameDay = (date1: Date, date2: Date): boolean =>
   date1.getFullYear() === date2.getFullYear() &&
   date1.getMonth() === date2.getMonth() &&
   date1.getDate() === date2.getDate();
 
-const Week = ({ date, month, select, selected }: WeekProps): any => {
+const Week = memo<CalendarWeekProps>(({ date, month, select, selected }): React.ReactNode => {
   const handleClick = (selectedDay: Date) => {
     select(selectedDay);
   };
@@ -83,12 +99,12 @@ const Week = ({ date, month, select, selected }: WeekProps): any => {
       ))}
     </Tr>
   );
-};
+});
 
 const today = new Date();
-export const Calendar = () => {
-  const [currentMonth, setCurrentMonth] = useState(today);
-  const [selectedDate, setSelectedDate] = useState(today);
+export const Calendar = (): React.ReactNode => {
+  const [currentMonth, setCurrentMonth] = useState<Date>(today);
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
 
   const previous = useCallback(() => {
     setCurrentMonth((prevMonth) => {
@@ -106,14 +122,14 @@ export const Calendar = () => {
     });
   }, []);
 
-  const select = (date: any) => {
+  const select = (date: Date) => {
     setSelectedDate(new Date(date));
     const dateClone = new Date(date.getTime());
     setCurrentMonth(dateClone);
   };
 
-  const renderTableWeeks = () => {
-    const weeks = [];
+  const renderTableWeeks = (): React.ReactNode => {
+    const weeks: React.ReactNode[] = [];
     let done = false;
     const date = new Date(currentMonth);
 
@@ -142,23 +158,17 @@ export const Calendar = () => {
     return weeks;
   };
 
-  const renderMonthName = useMemo(
-    () =>
-      currentMonth.toLocaleDateString(undefined, {
-        month: 'long',
-        year: 'numeric',
-      }),
-    [currentMonth]
-  );
+  const renderMonthName = currentMonth.toLocaleDateString(undefined, {
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <Container maxW="90rem">
       <Header renderMonthName={renderMonthName} previous={previous} next={next} />
       <TableContainer bg="backgroundContent">
         <Table>
-          <Thead>
-            <Tr h="6rem">{renderDayNames}</Tr>
-          </Thead>
+          <RenderDayNames />
           <Tbody>{renderTableWeeks()}</Tbody>
         </Table>
       </TableContainer>
