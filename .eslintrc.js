@@ -30,7 +30,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-plusplus': 'off',
     // '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-    // 'no-underscore-dangle': 'off',
+    'no-underscore-dangle': 'off',
     'react/prop-types': 'off',
     // 'react/require-default-props': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',

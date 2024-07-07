@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   Container,
   Flex,
@@ -13,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { TodoList } from 'widgets/TodoList';
+import { userActions } from 'entities/User';
 import { CustomModal } from 'shared/ui/CustomModal/CustomModal';
 import * as styles from './Calendar.module.scss';
 
@@ -113,6 +115,7 @@ const today = new Date();
 export const Calendar = (): React.ReactNode => {
   const [currentMonth, setCurrentMonth] = useState<Date>(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const dispatch = useDispatch();
 
   // Контроль отображения модалки
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -137,10 +140,20 @@ export const Calendar = (): React.ReactNode => {
     const target = e.target as HTMLTableCellElement;
     if (target.tagName === 'TD') {
       const selectedDay = new Date(target.dataset.date);
+      // TODO: убрать из стейта, т.к. день теперь хранится в сторе
       setSelectedDate(selectedDay);
       const dateClone = new Date(selectedDay.getTime());
       setCurrentMonth(dateClone);
       onOpen();
+
+      const day = selectedDay.getDate().toLocaleString('en-US', { minimumIntegerDigits: 2 });
+      const month = (selectedDay.getMonth() + 1).toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+      });
+      const year = selectedDay.getFullYear();
+      const date = `${day}-${month}-${year}`;
+
+      dispatch(userActions.setDay(date));
     }
   };
 
