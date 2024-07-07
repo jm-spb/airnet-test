@@ -8,8 +8,10 @@ const theme = extendTheme({
     fontM: '1.6rem / 2.4rem',
     fontSizeL: '2.4rem',
     fontLineL: '3.2rem',
+    fontL: '2.4rem / 3.2rem',
     fontSizeXl: '3.2rem',
     fontLineXl: '4rem',
+    fontXl: '3.2rem / 4rem',
   },
   colors: {
     primary: '#352452',
@@ -17,6 +19,7 @@ const theme = extendTheme({
     primaryLight: '#9082ce',
     secondary: '#7da2d3',
     secondarySelected: '#cbd8e9',
+    success: '#38A169',
 
     // BACKGROUND COLORS
     backgroundMain: '#dddcdc',

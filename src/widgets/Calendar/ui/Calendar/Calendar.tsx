@@ -1,6 +1,19 @@
 import React, { memo, useCallback, useState } from 'react';
-import { Container, Flex, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+  Container,
+  Flex,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { TodoList } from 'widgets/TodoList';
+import { CustomModal } from 'shared/ui/CustomModal/CustomModal';
 import * as styles from './Calendar.module.scss';
 
 interface CalendarWeekProps {
@@ -101,6 +114,9 @@ export const Calendar = (): React.ReactNode => {
   const [currentMonth, setCurrentMonth] = useState<Date>(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
+  // Контроль отображения модалки
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const previous = useCallback(() => {
     setCurrentMonth((prevMonth) => {
       const prevMonthDate = new Date(prevMonth);
@@ -124,6 +140,7 @@ export const Calendar = (): React.ReactNode => {
       setSelectedDate(selectedDay);
       const dateClone = new Date(selectedDay.getTime());
       setCurrentMonth(dateClone);
+      onOpen();
     }
   };
 
@@ -170,6 +187,9 @@ export const Calendar = (): React.ReactNode => {
           <Tbody onClick={handleDayClick}>{renderTableWeeks()}</Tbody>
         </Table>
       </TableContainer>
+      <CustomModal isOpen={isOpen} onClose={onClose}>
+        <TodoList />
+      </CustomModal>
     </Container>
   );
 };
