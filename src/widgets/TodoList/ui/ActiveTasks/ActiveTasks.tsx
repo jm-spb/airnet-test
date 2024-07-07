@@ -28,7 +28,6 @@ export const ActiveTasks = (): React.ReactNode => {
     if (foundActiveTasks && !userDayTasks) {
       const activeTasksParsed = JSON.parse(foundActiveTasks);
       dispatch(userActions.renderActiveTasks(activeTasksParsed.active));
-      console.log(activeTasksParsed);
     }
   }, []);
 

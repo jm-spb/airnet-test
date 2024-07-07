@@ -140,6 +140,7 @@ export const Calendar = (): React.ReactNode => {
     const target = e.target as HTMLTableCellElement;
     if (target.tagName === 'TD') {
       const selectedDay = new Date(target.dataset.date);
+
       // TODO: убрать из стейта, т.к. день теперь хранится в сторе
       setSelectedDate(selectedDay);
       const dateClone = new Date(selectedDay.getTime());

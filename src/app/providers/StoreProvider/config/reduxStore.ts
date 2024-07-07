@@ -1,6 +1,5 @@
 import { ReducersMapObject, configureStore } from '@reduxjs/toolkit';
 import { userReducer } from 'entities/User';
-import { UserSchema } from 'entities/User/model/types/user';
 import { StateSchema } from './reduxStoreTypes';
 
 // createReduxStore - для подключения стора в тестах

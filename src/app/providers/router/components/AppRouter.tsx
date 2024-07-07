@@ -1,4 +1,3 @@
-import { Container } from '@chakra-ui/react';
 import { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { routeConfig } from 'shared/config/routeConfig/routeConfig';
