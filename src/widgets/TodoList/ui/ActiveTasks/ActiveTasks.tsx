@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
@@ -15,6 +15,7 @@ import {
 import { MdCheck, MdClose, MdSettings } from 'react-icons/md';
 import { StateSchema } from 'app/providers/StoreProvider';
 import { userActions } from 'entities/User';
+import { UserTasks } from 'entities/User/model/types/user';
 
 export const ActiveTasks = (): React.ReactNode => {
   const inputRef = useRef(null);
@@ -22,22 +23,68 @@ export const ActiveTasks = (): React.ReactNode => {
   const { tasks, selectedDay } = useSelector((state: StateSchema) => state.user);
   const userDayTasks = tasks.find((task) => task.date === selectedDay);
 
+  useEffect(() => {
+    const foundActiveTasks = localStorage.getItem(selectedDay);
+    if (foundActiveTasks && !userDayTasks) {
+      const activeTasksParsed = JSON.parse(foundActiveTasks);
+      dispatch(userActions.renderActiveTasks(activeTasksParsed.active));
+      console.log(activeTasksParsed);
+    }
+  }, []);
+
   const handleAddTask = () => {
     if (inputRef.current.value) dispatch(userActions.addActiveTask(inputRef.current.value));
     inputRef.current.value = '';
   };
 
   const handleSaveTask = () => {
-    localStorage.setItem('task', inputRef.current.value);
-    inputRef.current.value = '';
+    if (userDayTasks) {
+      localStorage.setItem(selectedDay, JSON.stringify({ active: userDayTasks.active }));
+      inputRef.current.value = '';
+
+      // TODO: Заменить на кастомное оповещение
+      alert('Задача сохранена в Local Storage');
+    }
   };
 
   const handleMarkAsDone = (idx: number) => {
     dispatch(userActions.markTaskAsDone(idx));
     dispatch(userActions.deleteActiveTask(idx));
+
+    // TODO: вынести в shared как функцию-хэлпер
+    const storedTasks = localStorage.getItem(selectedDay);
+    if (storedTasks) {
+      const parsedTasks: UserTasks = JSON.parse(storedTasks);
+      if (parsedTasks.active) {
+        parsedTasks.active = parsedTasks.active.filter((_, index) => index !== idx);
+      }
+
+      localStorage.setItem(selectedDay, JSON.stringify(parsedTasks));
+
+      if (parsedTasks.active.length === 0) {
+        localStorage.removeItem(selectedDay);
+      }
+    }
   };
 
-  const handleDeleteTask = (idx: number) => dispatch(userActions.deleteActiveTask(idx));
+  const handleDeleteTask = (idx: number) => {
+    dispatch(userActions.deleteActiveTask(idx));
+
+    // TODO: вынести в shared как функцию-хэлпер
+    const storedTasks = localStorage.getItem(selectedDay);
+    if (storedTasks) {
+      const parsedTasks: UserTasks = JSON.parse(storedTasks);
+      if (parsedTasks.active) {
+        parsedTasks.active = parsedTasks.active.filter((_, index) => index !== idx);
+      }
+
+      localStorage.setItem(selectedDay, JSON.stringify(parsedTasks));
+
+      if (parsedTasks.active.length === 0) {
+        localStorage.removeItem(selectedDay);
+      }
+    }
+  };
 
   return (
     <Box>

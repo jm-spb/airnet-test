@@ -14,18 +14,14 @@ interface CustomModalProps {
   children: React.ReactNode;
 }
 
-export const CustomModal = ({ isOpen, onClose, children }: CustomModalProps): React.ReactNode => {
-  console.log('');
-
-  return (
-    <Modal size="4xl" onClose={onClose} isOpen={isOpen} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalBody marginTop="1rem">{children}</ModalBody>
-        <ModalFooter>
-          <Button onClick={onClose}>Закрыть</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
-};
+export const CustomModal = ({ isOpen, onClose, children }: CustomModalProps): React.ReactNode => (
+  <Modal size="4xl" onClose={onClose} isOpen={isOpen} isCentered>
+    <ModalOverlay />
+    <ModalContent>
+      <ModalBody marginTop="1rem">{children}</ModalBody>
+      <ModalFooter>
+        <Button onClick={onClose}>Закрыть</Button>
+      </ModalFooter>
+    </ModalContent>
+  </Modal>
+);

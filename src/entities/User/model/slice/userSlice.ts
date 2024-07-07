@@ -13,6 +13,14 @@ const userSlice = createSlice({
     setDay: (state, action: PayloadAction<string>) => {
       state.selectedDay = action.payload;
     },
+    renderActiveTasks: (state, action: PayloadAction<string[]>) => {
+      const foundTasksByDate = state.tasks.find((task) => task.date === state.selectedDay);
+      if (!foundTasksByDate) {
+        state.tasks.push({ date: state.selectedDay, active: action.payload, done: [] });
+      } else {
+        foundTasksByDate.active.push(...action.payload);
+      }
+    },
     addActiveTask: (state, action: PayloadAction<string>) => {
       const task = action.payload;
       const foundTasksByDate = state.tasks.find((task) => task.date === state.selectedDay);

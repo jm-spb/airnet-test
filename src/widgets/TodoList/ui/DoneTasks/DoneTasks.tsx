@@ -23,6 +23,7 @@ export const DoneTasks = memo((): React.ReactNode => {
       <List spacing={3} marginTop="1rem">
         {userDayTasks?.done?.map((task, idx) => (
           <ListItem
+            key={task}
             fontSize="fontSizeM"
             display="flex"
             alignItems="center"
